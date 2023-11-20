@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    int garbageCollection(vector<string>& garbage, vector<int>& travel) {
+        int countG = 0, countP = 0, countM = 0, indp = -1, indg = -1, indm = -1;
+
+        for (size_t i = 0; i < garbage.size(); ++i) {
+            const string& element = garbage[i];
+            for (size_t j = 0; j < element.size(); ++j) {
+                if (element[j] == 'G') {
+                    countG++;
+                    indg = static_cast<int>(i);
+                }
+                if (element[j] == 'P') {
+                    countP++;
+                    indp = static_cast<int>(i);
+                }
+                if (element[j] == 'M') {
+                    countM++;
+                    indm = static_cast<int>(i);
+                }
+            }
+        }
+
+        int sump = 0, summ = 0, sumg = 0;
+
+        for (int i = 0; i < indg; ++i) {
+            sumg += travel[i];
+        }
+        for (int i = 0; i < indm; ++i) {
+            summ += travel[i];
+        }
+        for (int i = 0; i < indp; ++i) {
+            sump += travel[i];
+        }
+
+        int sum = countG + countP + countM + sump + summ + sumg;
+        return sum;
+    }
+};
