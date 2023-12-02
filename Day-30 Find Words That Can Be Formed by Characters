@@ -1,0 +1,34 @@
+#include <vector>
+#include <string>
+
+class Solution {
+public:
+    int countCharacters(std::vector<std::string>& words, std::string chars) {
+        std::vector<int> charCount(26, 0);
+
+        for (char ch : chars) {
+            charCount[ch - 'a']++;
+        }
+
+        int ans = 0;
+
+        for (const std::string& word : words) {
+            std::vector<int> tempCharCount(charCount);
+
+            bool validWord = true;
+
+            for (char ch : word) {
+                if (--tempCharCount[ch - 'a'] < 0) {
+                    validWord = false;
+                    break;
+                }
+            }
+
+            if (validWord) {
+                ans += word.length();
+            }
+        }
+
+        return ans;
+    }
+};
