@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int maxScore(string s) {
+        int pointer = 0;
+        int end = s.length();
+        int a = 0;
+        int tmp;
+        while (pointer < end-1) {
+            tmp = 0;
+            for (int i = 0; i <= end; i++) {
+                if (s[i]=='0' && i <= pointer) {
+                    tmp++;
+                }
+                else if (s[i]=='1' && i > pointer) {
+                    tmp++;
+                }
+            }
+            a = max(a, tmp);
+            pointer++;
+        }
+        return a;
+    }
+};
