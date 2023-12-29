@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int rec( int idx , int maxDay, int daysDone , vector<int>&jobDifficulty , int d , vector<vector<vector<int>>>&dp)
+    {
+         if( idx == jobDifficulty.size())
+         {
+             if(daysDone == d) return 0;
+             else return 1e9;
+         }
+
+         if(dp[idx][daysDone][maxDay] != -1)
+         {
+             return dp[idx][daysDone][maxDay];
+         }
+
+         int newDay = 1e9;
+
+         maxDay = max( maxDay , jobDifficulty[idx]);
+         
+         if( daysDone < d-1 || daysDone < d && idx == jobDifficulty.size() - 1)
+         {
+             newDay = maxDay + rec( idx + 1 , 0 , daysDone + 1 , jobDifficulty , d , dp);
+         }
+
+         int sameDay = rec( idx + 1 , maxDay , daysDone , jobDifficulty , d , dp);
+
+         return dp[idx][daysDone][maxDay] = min( newDay , sameDay);
+    }
+    int minDifficulty(vector<int>& jobDifficulty, int d) {
+
+       int size = jobDifficulty.size();
+       
+       int maxEle = *max_element(jobDifficulty.begin(),jobDifficulty.end());
+
+       vector<vector<vector<int>>>dp( size + 1 , vector<vector<int>>( d + 1 , vector<int>( maxEle + 1,-1)));
+
+       int ans =  rec( 0 , 0 , 0 , jobDifficulty , d , dp);
+
+       return ans >= 1e9 ? -1 : ans;   
+    }
+};
