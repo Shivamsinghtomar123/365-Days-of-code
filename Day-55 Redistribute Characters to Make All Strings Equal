@@ -1,0 +1,28 @@
+#include <vector>
+#include <string>
+
+class Solution {
+public:
+    bool makeEqual(std::vector<std::string>& w) {
+        const int alphabetSize = 26;
+        int charCount[alphabetSize] = {0};
+
+        // Count characters in all strings
+        for (std::size_t i = 0; i < w.size(); ++i) {
+            const std::string& word = w[i];
+            for (std::size_t j = 0; j < word.size(); ++j) {
+                charCount[word[j] - 'a']++;
+            }
+        }
+
+        // Check if the counts are divisible by the number of strings
+        int numStrings = w.size();
+        for (int k = 0; k < alphabetSize; ++k) {
+            if (charCount[k] % numStrings != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+};
