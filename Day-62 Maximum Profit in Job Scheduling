@@ -1,0 +1,55 @@
+class jobState{
+    public:
+        int start;
+        int end;
+        int profit;
+};
+
+int dp[60006];
+class Solution {
+private:
+    static bool mycmp(jobState &j1 , jobState &j2){
+        return j1.start <= j2.start;
+    }
+
+    int getNextIndex(vector<jobState>&info,int currEnd){
+        int index = -1;
+        int start = -1,end = info.size();
+        while(end - start > 1){
+            int mid = start + (end-start)/2;
+            if(info[mid].start >= currEnd){
+                index = mid;
+                end = mid;
+            }
+            else{
+                start = mid;
+            }
+        }
+        return index;
+    }
+    int f(int idx, vector<jobState>&info){
+        if(idx >= info.size()){
+            return 0;
+        }
+        if(dp[idx]!=-1) return dp[idx];
+        int currEnd = info[idx].end;
+        int nextIdx = getNextIndex(info,currEnd);
+        int take = info[idx].profit + f(nextIdx,info);
+        int notTake = f(idx+1,info);
+        return dp[idx] = max(take,notTake);
+    }
+public:
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
+        memset(dp,-1,sizeof(dp));
+        int n = startTime.size();
+        vector<jobState>vp(n);
+        for(int i = 0 ; i < n ; i++){
+            vp[i].start = startTime[i];
+            vp[i].end = endTime[i];
+            vp[i].profit = profit[i];
+        }
+        sort(vp.begin(),vp.end(),mycmp);
+        int ans = f(0,vp);
+        return ans;
+    }
+};
