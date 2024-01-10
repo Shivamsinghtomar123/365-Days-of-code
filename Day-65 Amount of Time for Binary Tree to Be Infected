@@ -1,0 +1,73 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+// mapping of node to parent
+    void preOrder(TreeNode *root , unordered_map<TreeNode*,TreeNode*>&nodeToParent, TreeNode* parent , TreeNode *&first, int start){
+        if(root==NULL){
+            return;
+        }
+        if(start==root->val){
+            first=root;
+        }
+        nodeToParent[root]=parent;
+
+        preOrder(root->left , nodeToParent , root ,first ,start);
+        preOrder(root->right , nodeToParent , root ,first ,start);
+
+    }
+// time to burn  tree
+    int amountOfTime(TreeNode* root, int start) {
+        int time=0;
+        unordered_map<TreeNode*,TreeNode*>nodeToParent;
+        TreeNode *first=NULL;
+        nodeToParent[root]=NULL;
+        preOrder(root , nodeToParent ,NULL , first ,start);
+        unordered_map<TreeNode*,bool>visited;
+        queue<TreeNode*>q;
+        q.push(first);
+        visited[first]=true;
+        cout<< first->val <<endl;
+
+
+        while(!q.empty()){
+            int size= q.size();
+            int flag=false;
+            for(int i= 0; i< size; i++){
+                TreeNode* a =q.front();
+                visited[a]=true;
+                q.pop();
+                
+                if(a->left && !visited[a->left]){
+                    q.push(a->left);
+                    visited[a->left]=true;
+                    flag=true;
+                }
+                if(a->right && !visited[a->right]){
+                    q.push(a->right);
+                       flag=true;
+                       visited[a->right]=true;
+                }
+                if(nodeToParent[a] && !visited[nodeToParent[a]]){
+                    q.push(nodeToParent[a]);
+                     visited[nodeToParent[a]]=true;
+                       flag=true;
+                }
+
+            }
+            if(flag){
+                time++;
+            }
+        }
+        return time;
+    }
+};
