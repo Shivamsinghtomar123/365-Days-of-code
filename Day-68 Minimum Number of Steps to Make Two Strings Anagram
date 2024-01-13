@@ -1,0 +1,23 @@
+
+class Solution {
+public:
+    int minSteps(const std::string& s, const std::string& t) {
+        std::map<char, int> count_s;
+        std::map<char, int> count_t;
+
+        for (char c : s) {
+            count_s[c]++;
+        }
+
+        for (char c : t) {
+            count_t[c]++;
+        }
+
+        int steps = 0;
+        for (char c = 'a'; c <= 'z'; c++) {
+            steps += std::abs(count_s[c] - count_t[c]);
+        }
+
+        return steps / 2;
+    }
+};
